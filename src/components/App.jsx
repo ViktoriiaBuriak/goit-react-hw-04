@@ -16,6 +16,7 @@ function App() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
+  const [showBtn, setShowBtn] = useState(false);
 
   useEffect(() => {
     if (!query) return;
@@ -24,12 +25,16 @@ function App() {
       try {
         setError(false);
         setLoading(true);
-        const data = await requestImagesByQuery(query, page);
+        const { results, total_pages } = await requestImagesByQuery(
+          query,
+          page
+        );
         if (page > 1) {
-          setImages((prevImages) => [...prevImages, ...data.results]);
+          setImages((prevImages) => [...prevImages, ...results]);
         } else {
-          setImages(data.results);
+          setImages(results);
         }
+        setShowBtn(total_pages > page);
       } catch (error) {
         setError(true);
       } finally {
@@ -54,7 +59,10 @@ function App() {
   };
 
   const handleSearch = (inputValue) => {
-    setQuery(inputValue);
+    if (inputValue !== query) {
+      setQuery(inputValue);
+      setImages([]);
+    }
   };
 
   const loadMoreImages = () => {
@@ -76,7 +84,7 @@ function App() {
           image={selectedImage}
         />
       )}
-      {Array.isArray(images) && <LoadMoreBtn loadMore={loadMoreImages} />}
+      {showBtn && <LoadMoreBtn loadMore={loadMoreImages} />}
     </>
   );
 }
