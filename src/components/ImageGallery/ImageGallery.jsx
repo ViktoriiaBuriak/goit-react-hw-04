@@ -5,13 +5,9 @@ function ImageGallery({ images, handleImageClick }) {
   return (
     <ul className={css.imageList}>
       {images.map((image) => (
-        <li
-          className={css.imageItem}
-          key={image.id}
-          onClick={() => handleImageClick(image)}
-        >
+        <li className={css.imageItem} key={image.id}>
           <div>
-            <ImageCard image={image} />
+            <ImageCard image={image} handleImageClick={handleImageClick} />
           </div>
         </li>
       ))}

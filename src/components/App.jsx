@@ -62,6 +62,7 @@ function App() {
     if (inputValue !== query) {
       setQuery(inputValue);
       setImages([]);
+      setPage(1);
     }
   };
 
